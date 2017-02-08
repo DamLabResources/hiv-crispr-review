@@ -69,8 +69,8 @@ def gRNA_score_hit(guide_seq, hit_seq, dampening=False):
     nmiss = 0
     miss_sum = 0.0
     for p, g, h in zip(penalties,
-                       seq_to_str(guide_seq),
-                       seq_to_str(hit_seq)):
+                       str(guide_seq),
+                       str(hit_seq)):
         if g != h:
             nmiss += 1
             score *= 1-p
