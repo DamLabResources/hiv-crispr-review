@@ -3,6 +3,7 @@ import numpy as np
 
 
 def generate_genome_plot(ax, data, xlims=(0, 9717), top_axis=False):
+    """Plots the Percent Cleaved vs the HXB2 start position for each gRNA."""
     
     data.plot(ax=ax, x = 'Start', y = 'Percent cleaved', 
           kind='scatter', color = 'k', s = 30)
@@ -25,6 +26,8 @@ def generate_genome_plot(ax, data, xlims=(0, 9717), top_axis=False):
     sbn.despine(ax=ax)
     
 def generate_entropy_plot(ax, data):
+    """Plot the Percent cleaved vs the 20-mer entropy for each gRNA."""
+    
     data.plot(ax=ax, x = 'Entropy (bits)', y = 'Percent cleaved', 
           kind='scatter', color = 'k', s = 30)
     sbn.regplot(data = data, x = 'Entropy (bits)', 
@@ -41,17 +44,18 @@ def generate_entropy_plot(ax, data):
 
     sbn.despine(ax=ax)
     
-def generate_heatmap(ax, freqs, gRNA, offset):
+def generate_heatmap(ax, freqs, gRNA, offset, for_strand=True):
+    """Generate the frequency heatmap of the alignment and annotate the target sequence."""
     
+    # Use seaborn to create the heatmap
     sbn.heatmap(freqs, ax=ax, 
                 vmin = 0, vmax = 1.0,
                 cbar_kws={'label': 'Conservation'}, cmap='copper_r', linewidth=0.75)
     ax.set_xticklabels(['%s\n%i' % (l, p) for p, l in enumerate(gRNA, offset)], rotation=0)
 
+    # Create green boxes around the target sequence
     for n, l in enumerate(gRNA):
-
         bottom = (a for a, b in enumerate('TGCA.N') if b == l).next()
-
         ax.bar(left = n,
                width = 1,
                height = 1,
@@ -61,7 +65,7 @@ def generate_heatmap(ax, freqs, gRNA, offset):
                facecolor='None')
     [t.set_rotation(0) for t in ax.get_yticklabels()]
 
-
+    # Add the penalties to the top of the figure
     pen_ax = ax.twiny()
     pen_ax.set_xlim(0, 23)
     pen_ax.set_xticks(np.arange(23)+0.5)
@@ -69,14 +73,23 @@ def generate_heatmap(ax, freqs, gRNA, offset):
                      0.389, 0.079, 0.445, 0.508, 0.613,
                      0.851, 0.732, 0.828, 0.615, 0.804,
                      0.685, 0.583]
-    pen_ax.set_xticklabels(penalties+list('***'), rotation = 90)
+    
+    # Deal with orientation
+    if for_strand:
+        labels = penalties+list('***')
+    else:
+        labels = list('***') + penalties[::-1]
+        
+    pen_ax.set_xticklabels(labels, rotation = 90)
     
 
 def generate_hiv_orfs(ax):
+    """Create a diagram of the HXB2 ORFs."""
     
     ax.set_yticks([])
     ax.set_xticks([])
 
+    # List of ORF positions from https://www.hiv.lanl.gov/components/sequence/HIV/search/help.html#region
     points = [("5' LTR", 1, 634, 1),
               ("Gag", 790, 2292, 1),
               ("Pol", 2085, 5096, 3),
@@ -91,8 +104,8 @@ def generate_hiv_orfs(ax):
               ("Nef", 8797, 9417, 1), 
               ("3' LTR", 9086,  9719, 2)]
 
+    # Create boxes for each ORF along with 
     for name, start, stop, frame in points:
-
         ax.bar(bottom = frame+0.1, height = 0.8,
                left = start, width = stop-start,
                edgecolor = 'k', facecolor='k')
@@ -101,7 +114,8 @@ def generate_hiv_orfs(ax):
                         ha = 'center', va='center', color='w', fontsize=14)
 
     a = 0.5
-
+    
+    # Add arrows joining Tat and Rev exons
     ax.annotate("Tat", xy = (5900, 2.5), xycoords = 'data', xytext = (7000, 1.5),
                 fontsize=14, color='k',ha = 'center', va='center',
                 arrowprops=dict(arrowstyle="-",
@@ -128,7 +142,7 @@ def generate_hiv_orfs(ax):
                                 lw=2, alpha=a
                                 ))
 
-
+    # Add annotations for shorter genes
     ax.annotate('Vpr', xy = (5559, 3.5), xycoords = 'data', fontsize=14,
                 ha='right', va='center')
     ax.annotate('Vpr', xy = (5559, 3.5), xycoords = 'data', fontsize=14,
