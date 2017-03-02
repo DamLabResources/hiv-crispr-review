@@ -44,13 +44,13 @@ def generate_entropy_plot(ax, data):
 
     sbn.despine(ax=ax)
     
-def generate_heatmap(ax, freqs, gRNA, offset, for_strand=True):
+def generate_heatmap(ax, freqs, gRNA, offset, for_strand=True, vmin=0, vmax=12):
     """Generate the frequency heatmap of the alignment and annotate the target sequence."""
     
     # Use seaborn to create the heatmap
-    sbn.heatmap(freqs, ax=ax, 
-                vmin = 0, vmax = 1.0,
-                cbar_kws={'label': 'Conservation'}, cmap='copper_r', linewidth=0.75)
+    sbn.heatmap(-np.log10(freqs), ax=ax, 
+                vmin = vmin, vmax = vmax,
+                cbar_kws={'label': '-log(Frequency)'}, cmap='copper_r')
     ax.set_xticklabels(['%s\n%i' % (l, p) for p, l in enumerate(gRNA, offset)], rotation=0)
 
     # Create green boxes around the target sequence
@@ -61,7 +61,7 @@ def generate_heatmap(ax, freqs, gRNA, offset, for_strand=True):
                height = 1,
                bottom = bottom,
                linewidth = 2,
-               edgecolor = 'g', 
+               edgecolor = 'r', 
                facecolor='None')
     [t.set_rotation(0) for t in ax.get_yticklabels()]
 
