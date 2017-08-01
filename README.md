@@ -4,7 +4,7 @@ This repository contains a bioinformatics analysis of HIV-1 targeted CRISRP/Cas9
 
 This analysis should be run in following order:
   1. `SequenceProcess.ipynb` - This loads the sequence data and calculates the gRNA cleavage ability across patient samples.
-  2. `ProcessMITResults.ipynb` - This loads the processed data from the previous script, merges the data with that from the MIT Webserver, and generates the Supplemental Table 1 results.
+  2. `ProcessResults.ipynb` - This loads the processed data from the previous script, merges the data with that from the MIT Webserver, performs aggregate, and generates the Supplemental Table 1 results.
   3. `VisualizeResults.ipynb` - This loads the results from Supplemental Table 1 and generates the publication quality figures.
   
 Repository Inventory:
@@ -14,4 +14,7 @@ Repository Inventory:
   - `results/summary_res_all_gRNAs.xlsx` - Aggregated cleavage results across all gRNAs.
   - `results/SupTable1.xlsx` - Processed results.
   - `results/Table1.xlsx` - Summary results of the gRNAs aggregated by region.
-  - `results/Fig1ABCD.png` - Figure describing the results across the HXB2 genome.
+  - `results/Fig1AB.png` - Figure describing the results across the HXB2 genome.
+  - `results/Fig2AB.png` - Figure describing the effects of entropy on predicted percent cleaved.
+
+New gRNAs can be added to the analysis by editing the `data/gRNAList.xlsx` to add/remove gRNAs from consideration.
