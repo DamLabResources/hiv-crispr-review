@@ -12,7 +12,7 @@ def generate_genome_plot(ax, data, xlims=(0, 9717), top_axis=False):
     ax.set_xlabel('')
     ax.set_xticks([])
     ax.set_ylim(0, 100)
-    ax.set_ylabel('Percent cleaved', fontsize=16)
+    ax.set_ylabel('Predicted percent cleaved', fontsize=16)
 
     if top_axis:
         tw_ax = ax.twiny()
@@ -35,7 +35,7 @@ def generate_entropy_plot(ax, data):
                 ax=ax, color = 'k')
 
     ax.set_xlabel('Entropy (bits)', fontsize=16)
-    ax.set_ylabel('Percent cleaved', fontsize=16)
+    ax.set_ylabel('Predicted percent cleaved', fontsize=16)
     ax.set_ylim(0, 100)
     ax.set_xlim(0, 8)
     ax.bar(left = 0.5, width = 4.5,
